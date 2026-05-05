@@ -10,6 +10,12 @@ public class Planet : MonoBehaviour {
     public ShapeSettings shapeSettings;
     public ColorSettings colorSettings;
 
+    public bool autoUpdate = true;
+    [HideInInspector]
+    public bool colorFoldout = true;
+    [HideInInspector]
+    public bool shapeFoldout = true;
+
     ShapeGenerator shapeGenerator;
 
      private void Start() {
@@ -23,10 +29,6 @@ public class Planet : MonoBehaviour {
     MeshFilter[] meshFilters;
     [SerializeField, HideInInspector]
     TerrainFace[] faces;
-
-    private void OnValidate() {
-        GeneratePlanet();
-    }
 
     void Initialize() {
         shapeGenerator = new ShapeGenerator(shapeSettings);
@@ -59,26 +61,26 @@ public class Planet : MonoBehaviour {
     }
 
     public void OnShapeSettingsUpdated() {
-        if (shapeSettings != null) {
+        if (shapeSettings != null && autoUpdate) {
             Initialize();
             GenerateMesh();
         }
     }
 
     public void OnColorSettingsUpdated() {
-        if (colorSettings != null) {
+        if (colorSettings != null && autoUpdate) {
             Initialize();
             GenerateColors();
         }
     }
 
-    void GenerateMesh() {
+    public void GenerateMesh() {
         foreach(TerrainFace face in faces) {
             face.ConstructMesh();
         }
     }
 
-    void GenerateColors() {
+    public void GenerateColors() {
         foreach (MeshFilter m in meshFilters) {
             m.GetComponent<MeshRenderer>().sharedMaterial.color = colorSettings.planetColor;
         }
