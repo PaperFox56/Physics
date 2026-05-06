@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NoiseFilter
+public class SimpleNoiseFilter : INoiseFilter
 {
     Noise noise = new Noise();
     NoiseSettings settings;
 
-    public NoiseFilter(NoiseSettings settings)
+    public SimpleNoiseFilter(NoiseSettings settings)
     {
         this.settings = settings;
     }

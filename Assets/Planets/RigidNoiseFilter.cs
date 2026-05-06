@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RigidNoiseFilter : MonoBehaviour
+public class RigidNoiseFilter : INoiseFilter
 {
     Noise noise = new Noise();
     NoiseSettings settings;
