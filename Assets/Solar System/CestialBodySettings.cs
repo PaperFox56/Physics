@@ -2,17 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CestialBodySettings : MonoBehaviour
+[System.Serializable]
+public struct CestialBodySettings
 {
-    // Start is called before the first frame update
-    void Start()
+    public string name;
+    public float surfaceGravity;
+    public float radius;
+    public float mass
     {
-        
+        get
+        {
+            return surfaceGravity * radius * radius / GravitySimulation.gravityConstant;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public Vector3 startingPosition;
+    public Vector3 startingVelocity;
+
+    public Color color;
 }
