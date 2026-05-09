@@ -6,6 +6,8 @@ using UnityEngine;
 public class GravitySimulation : MonoBehaviour
 {
 
+    public Rigidbody ship;
+
     public static float gravityConstant = 1;
 
     public bool predictTrajectories;
@@ -29,7 +31,26 @@ public class GravitySimulation : MonoBehaviour
 
         if (predictTrajectories)
         {
+            for (int i = 0; i < celestialBodiesObjects.Length; i++)
+            {
+                GameObject obj = celestialBodiesObjects[i];
+                if (obj != null)
+                {
+                    obj.GetComponent<LineRenderer>().enabled = true;
+                }
+            }
             DrawPredictedTrajectories();
+        }
+        else
+        {
+            for (int i = 0; i < celestialBodiesObjects.Length; i++)
+            {
+                GameObject obj = celestialBodiesObjects[i];
+                if (obj != null)
+                {
+                    obj.GetComponent<LineRenderer>().enabled = false;
+                }
+            }
         }
     }
 
@@ -72,8 +93,6 @@ public class GravitySimulation : MonoBehaviour
 
                 LineRenderer line = sphere.AddComponent<LineRenderer>();
                 line.sharedMaterial = new Material(Shader.Find("Sprites/Default"));
-                line.startWidth = 0.1f;
-                line.endWidth = 0.1f;
 
                 celestialBodiesObjects[i] = sphere;
             }
@@ -190,6 +209,20 @@ public class GravitySimulation : MonoBehaviour
 
     public void FixedUpdate()
     {
-        StepInSimulation(Time.deltaTime);
+        StepInSimulation(Time.fixedDeltaTime);
+
+        // Update the player's velocity
+        Vector3 acc = new Vector3();
+
+        for (int j = 0; j < celestialBodies.Length; j++)
+        {
+            Vector3 distance = celestialBodies[j].Position - ship.transform.position;
+            float dist = Vector3.Dot(distance, distance) + .001f;
+            acc += gravityConstant * celestialBodies[j].settings.mass * distance.normalized / dist;
+        }
+
+        //ship.velocity += acc * Time.fixedDeltaTime;
+
+        ship.AddForce(acc, ForceMode.Acceleration);
     }
 }

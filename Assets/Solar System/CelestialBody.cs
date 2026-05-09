@@ -10,12 +10,12 @@ public struct CelestialBody
     {
         get
         {
-            return obj.transform.position;
+            return obj.transform.localPosition;
         }
 
         set
         {
-            obj.transform.position = value;
+            obj.transform.localPosition = value;
         }
     }
 
